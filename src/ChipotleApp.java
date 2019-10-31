@@ -98,29 +98,54 @@ public class ChipotleApp {
         //*****************************************************************
         // PART 4 : wrap at 50 characters, even if in the middle of a word
         //*****************************************************************
-
+        String hardWrappedReceipt = wrapOutput(fullReceipt, 50);
+        System.out.println("Hard Wrapped Receipt: ");
+        System.out.println(hardWrappedReceipt);
 
         //****************************************************************
         // PART 5 : wrap at 50 characters, on space (e.g. between words)
         //****************************************************************
         String wordWrappedReceipt = wrapOutputWordWise(fullReceipt, 50);
+        System.out.println("Word Wrapped Receipt: ");
         System.out.println(wordWrappedReceipt);
 
     } // end main
 
     //*****************************************************************
     // PART 4 : wrap at 50 characters, even if in the middle of a word
+    // I built part 4 after finding part 5, so same credit once again to the base code
     //*****************************************************************
-//    private static String wrapOutput(String str, int wrapLength) {
-//
-//    }
+    private static String wrapOutput(String str, int wrapLength) {
+
+        int inputLineLength = str.length();
+        int extra = 32;  // this adds some extra length to our StringBuilder for new-line chars and etc...
+        StringBuilder wrappedLine = new StringBuilder(inputLineLength + extra);
+
+        int offset = 0;
+        while (inputLineLength - offset > wrapLength) {
+
+            // String.substring(int beginIndex, int endIndex) returns a String which starts at beginIndex
+            // and extends to (endIndex - 1)
+            wrappedLine.append(str.substring(offset, wrapLength + offset));
+            wrappedLine.append("\n");
+
+            // because substring is exclusive of the end bound,
+            // we set the new offset to the old offset plus just wrapLength (not wrapLength + 1)
+            offset = offset + wrapLength;
+        }
+        // this is the last append, once we have less than wrapLength chars left in the string
+        wrappedLine.append(str.substring(offset));
+
+        return wrappedLine.toString();
+
+    }
 
     //****************************************************************
     // PART 5 : wrap at 50 characters, on space (e.g. between words)
-    //****************************************************************
     // credit to :
     // http://commons.apache.org/proper/commons-lang/javadocs/api-3.1/src-html/org/apache/commons/lang3/text/WordUtils.html#line.32
     // for being the source I based my code off of.
+    //****************************************************************
     private static String wrapOutputWordWise(String str, int wrapLength) {
         int inputLineLength = str.length();
         int offset = 0;
