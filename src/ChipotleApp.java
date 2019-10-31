@@ -65,47 +65,45 @@ public class ChipotleApp {
         //**********************************************
         for (int i = 0; i < 25; i++) {
 
-            //***************************************************
-            // randomly select 5 through 9 ingredient categories
-            //***************************************************
-            // range size is 5 (aka 9-5+1) and range start is 5
-            Random randomGenerator = new Random();
-            int numCategories = randomGenerator.nextInt(5) + 5;
-
             // initialize class-level variables before each new burrito... very important!...
             currentBurrito = "";
             currentBurritoCount = 0;
             ingredientCategories = 0;
             Arrays.fill(flagCategories, false);
 
-            System.out.println("flagCategories: " + Arrays.toString(flagCategories));
+            // make sure we always get at least 5 ingredient categories represented
+            // the handling of maximum 9 categories is done inside loopIngredients()
+            while(ingredientCategories < 5) {
+                loopIngredients();
+            }
 
-            // build one burrito
-            loopIngredients(numCategories);
-            System.out.println("flagCategories: " + Arrays.toString(flagCategories));
-            System.out.println("Burrito " + (i+1) +": " + currentBurrito);
-            System.out.println("current Burrito's ingredients count: " + currentBurritoCount);
-            System.out.println("numCategories robot requested: " + numCategories);
-            System.out.println("categories in this burrito: " + ingredientCategories + "\n");
+            // ************************************************************************************
+            // PARTS 1 + 2 : print out each burrito, its ingredients, and its price, using methods
+            // ************************************************************************************
+            System.out.print("Burrito " + (i+1) +": " + currentBurrito);
+            System.out.printf("$%.2f%n%n", calculatePrice());
 
-            // check if requested # of ingredients is there, if not loop again
-            if (ingredientCategories < numCategories) {
-                loopIngredients(numCategories);
-            };
-            System.out.println("flagCategories: " + Arrays.toString(flagCategories));
-            System.out.println("Burrito " + (i+1) +" AGAIN: " + currentBurrito);
-            System.out.println("current Burrito's ingredients count: " + currentBurritoCount);
-            System.out.println("numCategories robot requested: " + numCategories);
-            System.out.println("categories in this burrito: " + ingredientCategories+ "\n");
-            // highly doubtful that more than two ingredient loops are needed!
 
-        } // end 25 times loop
+        } // end the make 25 burritos loop!
         //****************************************************************
+
+
+        //****************************************************************
+        // PART 3 : get all the ingredients from the order and display them
+        //****************************************************************
+
 
     } // end main
 
+    private static double calculatePrice() {
+        // calculates the price of the current burrito
+        // references the class-level variable currentBurritoCount
 
-    private static void loopIngredients(int numCategories) {
+        return 3.00 + (currentBurritoCount * .50);
+
+    }
+
+    private static void loopIngredients() {
         // this takes ingredients from a category and adds them to the burrito
         // as long as the category is not already included in the burrito!
         for (int i = 0; i < allIngredients.size(); i++) {
@@ -157,12 +155,13 @@ public class ChipotleApp {
                     break;
             }
 
-            // once we hit the requested number of ingredient categories, break! (and exit function)
-            if (ingredientCategories == numCategories) {
+            // in case we are at 9 categories :: don't try for more!
+            // not super-sure if we actually need this code...
+            if (ingredientCategories == 9) {
                 break;
             }
 
-        } // end for each ingredient in allIngredients
+        } // end loop
 
     } // end method
 
