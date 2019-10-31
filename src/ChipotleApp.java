@@ -40,6 +40,9 @@ public class ChipotleApp {
     private static int quesoCount = 0;
     private static int sourCreamCount = 0;
 
+    // This will track our order's total cost, for part 3
+    private static double totalOrderCost = 0;
+
     // ****************************************************************************
     // Very important! Each of these variables, below, and up to bottom "****"s,
     // must be re-initialized between uses... they are used on a per-burrito basis!
@@ -83,7 +86,7 @@ public class ChipotleApp {
             // PARTS 1 + 2 : print out each burrito, its ingredients, and its price, using methods
             // ************************************************************************************
             System.out.print("Burrito " + (i+1) +": " + currentBurrito);
-            System.out.printf("$%.2f%n%n", calculatePrice());
+            System.out.printf("$%.2f%n%n", calculateBurritoPrice());
 
 
         } // end the make 25 burritos loop!
@@ -94,15 +97,65 @@ public class ChipotleApp {
         // PART 3 : get all the ingredients from the order and display them
         //****************************************************************
 
-
+        displayFullOrderReceipt();
 
     } // end main
 
-    private static double calculatePrice() {
+    private static void displayFullOrderReceipt() {
+        System.out.print("This order has ");
+        for(int i = 0; i < riceCount.length; i++) {
+            if (riceCount[i] > 0) {
+                System.out.print(riceCount[i] + " " + riceOptions.get(i) + " rice, ");
+            }
+        }
+        for(int i = 0; i < meatCount.length; i++) {
+            if (meatCount[i] > 0) {
+                System.out.print(meatCount[i] + " " + meatOptions.get(i) + ", ");
+            }
+        }
+        for(int i = 0; i < beansCount.length; i++) {
+            if (beansCount[i] > 0) {
+                System.out.print(beansCount[i] + " " + beansOptions.get(i) + " beans, ");
+            }
+        }
+        for(int i = 0; i < salsaCount.length; i++) {
+            if (salsaCount[i] > 0) {
+                System.out.print(salsaCount[i] + " " + salsaOptions.get(i) + " salsa, ");
+            }
+        }
+        for(int i = 0; i < veggiesCount.length; i++) {
+            if (veggiesCount[i] > 0) {
+                System.out.print(veggiesCount[i] + " " + veggiesOptions.get(i) + ", ");
+            }
+        }
+        if (cheeseCount > 0) {
+            System.out.print(cheeseCount + " cheese, ");
+        }
+        if (guacCount > 0) {
+            System.out.print(guacCount + " guac, ");
+        }
+        if (quesoCount > 0) {
+            System.out.print(quesoCount + " queso, ");
+        }
+        if (sourCreamCount > 0) {
+            System.out.print(sourCreamCount + " sour cream, ");
+        }
+        System.out.printf("and the sum is $%.2f%n%n", totalOrderCost);
+
+    }
+
+    private static double calculateBurritoPrice() {
         // calculates the price of the current burrito
         // references the class-level variable currentBurritoCount
+        double currentBurritoCost = 3.00 + (currentBurritoCount * .50);
 
-        return 3.00 + (currentBurritoCount * .50);
+        // saves the current burrito's cost into the total order cost
+        // note that we have only one order per instance of main() being run,
+        // which is why this approach works :) 
+        totalOrderCost += currentBurritoCost;
+
+        // returns current burrito's cost
+        return currentBurritoCost;
 
     }
 
