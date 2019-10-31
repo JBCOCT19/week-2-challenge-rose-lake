@@ -4,10 +4,7 @@
  * Thursday, October 31, 2019
  */
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 public class ChipotleApp {
 
@@ -92,57 +89,121 @@ public class ChipotleApp {
         } // end the make 25 burritos loop!
         //****************************************************************
 
-
         //****************************************************************
         // PART 3 : get all the ingredients from the order and display them
         //****************************************************************
+        String fullReceipt = displayFullOrderReceipt();
+        System.out.println(fullReceipt);
 
-        displayFullOrderReceipt();
+        //*****************************************************************
+        // PART 4 : wrap at 50 characters, even if in the middle of a word
+        //*****************************************************************
+
+
+        //****************************************************************
+        // PART 5 : wrap at 50 characters, on space (e.g. between words)
+        //****************************************************************
+        String wordWrappedReceipt = wrapOutputWordWise(fullReceipt, 50);
+        System.out.println(wordWrappedReceipt);
 
     } // end main
 
-    private static void displayFullOrderReceipt() {
-        System.out.print("This order has ");
+    //*****************************************************************
+    // PART 4 : wrap at 50 characters, even if in the middle of a word
+    //*****************************************************************
+//    private static String wrapOutput(String str, int wrapLength) {
+//
+//    }
+
+    //****************************************************************
+    // PART 5 : wrap at 50 characters, on space (e.g. between words)
+    //****************************************************************
+    // credit to :
+    // http://commons.apache.org/proper/commons-lang/javadocs/api-3.1/src-html/org/apache/commons/lang3/text/WordUtils.html#line.32
+    // for being the source I based my code off of.
+    private static String wrapOutputWordWise(String str, int wrapLength) {
+        int inputLineLength = str.length();
+        int offset = 0;
+        int extra = 32;  // this adds some extra length to our StringBuilder for new-line chars and etc...
+
+        StringBuilder wrappedLine = new StringBuilder(inputLineLength + extra);
+
+        while(inputLineLength - offset > wrapLength) {
+
+            // String.lastIndexOf(String str, int fromIndex)
+            // Returns the index within this string of the last occurrence of the specified substring,
+            // searching backward starting at the specified index.
+            //
+            // So,
+            //       str.lastIndexOf(' ', wrapLength + offset);
+            // will search backwards from 50 + 0 on the first go-round.
+            // It searches for the first space it encounters, searching backwards,
+            // and returns the index number for that space.
+            int spaceToWrapAt = str.lastIndexOf(' ', wrapLength + offset);
+
+            // once you find the spot to wrap at, do so.
+            wrappedLine.append(str.substring(offset, spaceToWrapAt));
+            wrappedLine.append("\n");
+
+            // this sets us up for the next loop iteration
+            offset = spaceToWrapAt + 1;
+
+        } // end of while
+
+        // now, we've popped out of the while. This means that our string that's left is shorter than wrapLength.
+        // String substring​(int beginIndex) :: Returns a string that is a substring of this string. The substring
+            // begins with the character at the specified index and extends to the end of this string.
+        wrappedLine.append(str.substring(offset));
+
+        return wrappedLine.toString();
+
+    }
+
+    private static String displayFullOrderReceipt() {
+        String fullReceipt = "";
+        fullReceipt += "This order has ";
         for(int i = 0; i < riceCount.length; i++) {
             if (riceCount[i] > 0) {
-                System.out.print(riceCount[i] + " " + riceOptions.get(i) + " rice, ");
+                fullReceipt += riceCount[i] + " " + riceOptions.get(i) + " rice, ";
             }
         }
         for(int i = 0; i < meatCount.length; i++) {
             if (meatCount[i] > 0) {
-                System.out.print(meatCount[i] + " " + meatOptions.get(i) + ", ");
+                fullReceipt += meatCount[i] + " " + meatOptions.get(i) + ", ";
             }
         }
         for(int i = 0; i < beansCount.length; i++) {
             if (beansCount[i] > 0) {
-                System.out.print(beansCount[i] + " " + beansOptions.get(i) + " beans, ");
+                fullReceipt += beansCount[i] + " " + beansOptions.get(i) + " beans, ";
             }
         }
         for(int i = 0; i < salsaCount.length; i++) {
             if (salsaCount[i] > 0) {
-                System.out.print(salsaCount[i] + " " + salsaOptions.get(i) + " salsa, ");
+                fullReceipt += salsaCount[i] + " " + salsaOptions.get(i) + " salsa, ";
             }
         }
         for(int i = 0; i < veggiesCount.length; i++) {
             if (veggiesCount[i] > 0) {
-                System.out.print(veggiesCount[i] + " " + veggiesOptions.get(i) + ", ");
+                fullReceipt += veggiesCount[i] + " " + veggiesOptions.get(i) + ", ";
             }
         }
         if (cheeseCount > 0) {
-            System.out.print(cheeseCount + " cheese, ");
+            fullReceipt += cheeseCount + " cheese, ";
         }
         if (guacCount > 0) {
-            System.out.print(guacCount + " guac, ");
+            fullReceipt += guacCount + " guac, ";
         }
         if (quesoCount > 0) {
-            System.out.print(quesoCount + " queso, ");
+            fullReceipt += quesoCount + " queso, ";
         }
         if (sourCreamCount > 0) {
-            System.out.print(sourCreamCount + " sour cream, ");
+            fullReceipt += sourCreamCount + " sour cream, ";
         }
-        System.out.printf("and the sum is $%.2f%n%n", totalOrderCost);
+        fullReceipt += String.format("and the sum is $%.2f%n", totalOrderCost);
 
-    }
+        return fullReceipt;
+
+    } // end display full order receipt method
 
     private static double calculateBurritoPrice() {
         // calculates the price of the current burrito
@@ -151,13 +212,13 @@ public class ChipotleApp {
 
         // saves the current burrito's cost into the total order cost
         // note that we have only one order per instance of main() being run,
-        // which is why this approach works :) 
+        // which is why this approach works :)
         totalOrderCost += currentBurritoCost;
 
         // returns current burrito's cost
         return currentBurritoCost;
 
-    }
+    } // end calculate Burrito Price method
 
     private static void loopIngredients() {
         // this takes ingredients from a category and adds them to the burrito
@@ -212,7 +273,6 @@ public class ChipotleApp {
             }
 
             // in case we are at 9 categories :: don't try for more!
-            // not super-sure if we actually need this code...
             if (ingredientCategories == 9) {
                 break;
             }
