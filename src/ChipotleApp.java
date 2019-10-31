@@ -40,23 +40,25 @@ public class ChipotleApp {
     private static int quesoCount = 0;
     private static int sourCreamCount = 0;
 
+    // ****************************************************************************
+    // Very important! Each of these variables, below, and up to bottom "****"s,
+    // must be re-initialized between uses... they are used on a per-burrito basis!
+    // ****************************************************************************
     // This will store our burrito!
-    // We re-initialize it as "" (in main) before each new burrito is made.
     private static String currentBurrito;
 
     // This will store the number of ingredients in our current burrito
-    // will be used to calculate the cost
+    // will be used to calculate the burrito's cost
     private static int currentBurritoCount;
 
     // this tracks how many ingredient categories we've used so far.
-    // assignment requires 5 to 9 are used each time.
-    // ("all" counts as one hit).
+    // assignment requires 5 to 9 are used each time. ("all" counts as one hit).
     private static int ingredientCategories;
 
     // this flags whether this ingredient has already been included or not...
-    // used to try to get the burrito up to the requested number of ingredients.
-    // these flags default to false
+    // used when relooping through categories to get the burrito up to at least 5
     private static boolean[] flagCategories = new boolean[allIngredients.size()];
+    // ****************************************************************************
 
     public static void main(String[] args) {
 
@@ -91,6 +93,7 @@ public class ChipotleApp {
         //****************************************************************
         // PART 3 : get all the ingredients from the order and display them
         //****************************************************************
+
 
 
     } // end main
